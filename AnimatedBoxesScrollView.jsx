@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Dimensions, Image } from "react-native";
+import { StyleSheet, Dimensions, Image, Platform } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedScrollHandler,
@@ -66,11 +66,14 @@ export default function AnimatedBoxesScrollView({ horizontal }) {
       scrollEventThrottle={16}
       onScroll={scrollHandler}
       horizontal={horizontal}
-      decelerationRate={0.9}
+      decelerationRate={0.5}
       bounces={false}
       showsHorizontalScrollIndicator={false}
       showsVerticalScrollIndicator={false}
       style={styles.scrollView}
+      onMomentumScrollEnd={() =>
+        Platform.select({ android: (direction.value = 0) })
+      }
     >
       {boxes.map((item, i) => {
         const perspectiveStyle = useAnimatedStyle(() => {
@@ -113,10 +116,11 @@ export default function AnimatedBoxesScrollView({ horizontal }) {
 const styles = StyleSheet.create({
   scrollView: {
     marginBottom: 50,
+    width: "100%",
   },
   verticalScrollItem: {
+    flex: 1,
     height: 200,
-    width: width - 60,
     backgroundColor: "gray",
     margin: 30,
   },
